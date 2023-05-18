@@ -32,6 +32,7 @@ function App() {
     }
     const hendleImageClick = (card)=>{
       setSelectedCard(card);
+      console.log(card)
       setImagePopupOpen(true)
     }
     function closeAllPopups() {
