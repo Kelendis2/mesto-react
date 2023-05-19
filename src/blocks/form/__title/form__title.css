@@ -6,7 +6,7 @@
   font-size: 24px;
   font-weight: 900;
   line-height: 29.05px;
-  font-family: 'Inter'
+  font-family: 'Inter';
 }
 @media screen and (max-width: 920px){
   .form__title{
