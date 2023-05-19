@@ -40,6 +40,7 @@ function App() {
       setProfilePopupOpen(false)
       setAddCardPopupOpen(false)
       setTrashPopupOpen(false)
+      setImagePopupOpen(false)
     }
 
     useEffect(()=>{

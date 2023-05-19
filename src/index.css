@@ -46,6 +46,11 @@
 @import url(./blocks/form/_type/_avatar/form_type_avatar.css);
 @import url(./blocks/popup/__container/_type/_avatar/popup__container_type_avatar.css);
 
+html{
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  background-color: black;
+}
 
 
 
