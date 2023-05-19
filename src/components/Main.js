@@ -25,6 +25,7 @@ function Main (props){
         return <Card
         card = {card}
         key = {card._id}
+        onOpenImage = {props.onOpenImage}
         />
 })}
 

@@ -4,6 +4,7 @@ function Card ({card,onOpenImage}){
 
   function handleClick() {
     onOpenImage(card);
+
   }
   return(
         <li className="element__item">
