@@ -16,7 +16,7 @@ function App() {
   const  [isImagePopupOpen,setImagePopupOpen] = useState(false)
   const  [cards,setCards] = useState([])
   const  [userInfo,setUserInfo] = useState([])
-  const  [selectedCard, setSelectedCard] = useState({});
+  const  [selectedCard, setSelectedCard] = useState(null);
 
   const handleEditAvatarClick =()=> {
     setAvatarPopupOpen(true)
@@ -32,15 +32,14 @@ function App() {
     }
     const hendleImageClick = (card)=>{
       setSelectedCard(card);
-      console.log(card)
-      setImagePopupOpen(true)
+
     }
     function closeAllPopups() {
       setAvatarPopupOpen(false)
       setProfilePopupOpen(false)
       setAddCardPopupOpen(false)
       setTrashPopupOpen(false)
-      setImagePopupOpen(false)
+      setSelectedCard(null)
     }
 
     useEffect(()=>{
@@ -144,7 +143,7 @@ function App() {
 
          <ImagePopup
          card={selectedCard}
-         isOpen={isImagePopupOpen}
+
          onClose={closeAllPopups}/>
 
    </div>
