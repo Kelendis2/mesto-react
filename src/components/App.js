@@ -3,9 +3,12 @@ import Header from './Header.js'
 import Main from './Main.js'
 import Footer from './Footer.js'
 import { useEffect, useState } from 'react';
-import PopupWithForm from './PopupWithForm.js'
-import ImagePopup from './ImagePopup.js'
+import PopupWithForm from './PopupWithForm.js';
+import ImagePopup from './ImagePopup.js';
+
 import { api } from '../utils/Api.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+
 
 
 function App() {
@@ -13,9 +16,8 @@ function App() {
   const  [isProfilePopupOpen,setProfilePopupOpen] = useState(false)
   const  [isAddCardPopupOpen,setAddCardPopupOpen] = useState(false)
   const  [isTrashPopupOpen,setTrashPopupOpen] = useState(false)
-  const  [isImagePopupOpen,setImagePopupOpen] = useState(false)
   const  [cards,setCards] = useState([])
-  const  [userInfo,setUserInfo] = useState([])
+  const  [currentUser,setCurrentUser] = useState([])
   const  [selectedCard, setSelectedCard] = useState(null);
 
   const handleEditAvatarClick =()=> {
@@ -44,8 +46,8 @@ function App() {
 
     useEffect(()=>{
       Promise.all([api.getProfile(),api.getInitialCards()])
-      .then(([userInfo,card])=>{
-        setUserInfo(userInfo)
+      .then(([currentUser,card])=>{
+        setCurrentUser(currentUser)
         setCards(card);
       }
       )
@@ -53,6 +55,7 @@ function App() {
     },[])
 
   return (
+    <CurrentUserContext.Provider value={currentUser}>
 
     <div className="App">
       <div className="page">
@@ -65,7 +68,7 @@ function App() {
         onOpenImage ={hendleImageClick}
         onClose ={closeAllPopups}
         cards={cards}
-        userInfo={userInfo}
+        currentUser={currentUser}
 
         />
         <Footer />
@@ -143,11 +146,11 @@ function App() {
 
          <ImagePopup
          card={selectedCard}
-
          onClose={closeAllPopups}/>
 
    </div>
     </div>
+    </CurrentUserContext.Provider>
   );
 }
 
