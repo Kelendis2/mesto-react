@@ -8,6 +8,7 @@ import ImagePopup from './ImagePopup.js';
 
 import { api } from '../utils/Api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import EditProfilePopup from './EditProfilePopup';
 
 
 
@@ -18,7 +19,7 @@ function App() {
   const  [isTrashPopupOpen,setTrashPopupOpen] = useState(false)
   const  [cards,setCards] = useState([])
   const  [currentUser,setCurrentUser] = useState([])
-  const  [selectedCard, setSelectedCard] = useState(null);
+  const  [selectedCard, setSelectedCard] = useState({});
 
   const handleEditAvatarClick =()=> {
     setAvatarPopupOpen(true)
@@ -41,8 +42,30 @@ function App() {
       setProfilePopupOpen(false)
       setAddCardPopupOpen(false)
       setTrashPopupOpen(false)
-      setSelectedCard(null)
+      setSelectedCard({})
     }
+    function handleCardLike(card) {
+      // Снова проверяем, есть ли уже лайк на этой карточке
+      const isLiked = card.likes.some(i => i._id === currentUser._id);
+
+      // Отправляем запрос в API и получаем обновлённые данные карточки
+      api.toggleLike(card._id, isLiked)
+      .then((newCard) => {
+          setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      })
+      .catch((err) => console.log(err));
+  }
+  function handleCardDelete(card) {
+    // Снова проверяем, наша карточка или нет
+    const isOwn = card.owner._id === currentUser._id;
+
+    // Отправляем запрос в API
+    api.deleteCard(card._id, isOwn)
+    .then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    })
+    .catch((err) => console.log(err));
+}
 
     useEffect(()=>{
       Promise.all([api.getProfile(),api.getInitialCards()])
@@ -69,6 +92,8 @@ function App() {
         onClose ={closeAllPopups}
         cards={cards}
         currentUser={currentUser}
+        onCardLike={handleCardLike}
+        onCardDelete ={handleCardDelete}
 
         />
         <Footer />
@@ -104,37 +129,9 @@ function App() {
             </label>
          </PopupWithForm>
 
-         <PopupWithForm
-        name = "profile"
-        title="Редактировать профиль"
-        buttonText="Сохранить"
-        isOpen={isProfilePopupOpen}
-        onClose ={closeAllPopups}
-         >
-          <label className="form__field">
-          <input className="form__input form__input_type_name"
-            type="text"
-            name="name"
-            placeholder="Имя"
-            id="Username"
-            minLength="2"
-            maxLength="40"
-            required />
-          <span className="form__input-error" id="Username-error"> </span>
-          </label>
-
-          <label className="form__field">
-          <input className="form__input form__input_type_about"
-              type="text"
-              placeholder="Описание профиля"
-              name="about" id="about"
-              minLength="2"
-              maxLength="200"
-              required />
-          <span className="form__input-error" id="about-error"> </span>
-          </label>
-
-          </PopupWithForm>
+         <EditProfilePopup
+         isOpen={isProfilePopupOpen}
+         onClose ={closeAllPopups}/>
 
           <PopupWithForm
         name = "trash"
