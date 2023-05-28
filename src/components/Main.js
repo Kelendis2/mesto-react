@@ -11,7 +11,7 @@ function Main ({
   onAddPlace,
   cards,
   onCardLike,
-  onCardDelete
+  onCardDelete,
 })
 {
   const currentUser = useContext(CurrentUserContext);

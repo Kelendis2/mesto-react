@@ -106,13 +106,10 @@ function App() {
 
 // Корзинки
   function handleCardDelete(card) {
-    // Снова проверяем, наша карточка или нет
-    const isOwn = card.owner._id === currentUser._id;
-
     // Отправляем запрос в API и удаляем карточку
-    api.deleteCard(card._id, isOwn)
-    .then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    api.deleteCard(card._id)
+    .then((item) => {
+        setCards(cards.filter((item) => item._id !== card._id));
     })
     .catch((err) => console.log(err));
 }
