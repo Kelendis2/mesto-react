@@ -23,10 +23,21 @@ function App() {
   const  [cards,setCards] = useState([])
   const  [currentUser,setCurrentUser] = useState([])
   const  [selectedCard, setSelectedCard] = useState({});
+
 //Открытие попапа автара и изменение его.
   const handleEditAvatarClick =()=> {
-    setAvatarPopupOpen(true)
+    setAvatarPopupOpen(true)}
+
+    const handleUpdateAvatar = (value)=>{
+      api.editAvatar(value)
+        .then((res)=>{
+          setCurrentUser(res);
+          closeAllPopups();
+         })
+        .catch((err) => console.log(err));
     }
+
+
 //Открытие попапа изменения профиля и изменение информации в нем.
     const handleEditProfileClick = () => {
       setProfilePopupOpen(true)
@@ -50,6 +61,7 @@ function App() {
     }
     const hendleImageClick = (card)=>{
       setSelectedCard(card);
+
 // Закрытие всех попапов
     }
     function closeAllPopups() {
@@ -59,6 +71,7 @@ function App() {
       setTrashPopupOpen(false)
       setSelectedCard({})
     }
+
 // Лайки
     function handleCardLike(card) {
       // Снова проверяем, есть ли уже лайк на этой карточке
@@ -71,6 +84,7 @@ function App() {
       })
       .catch((err) => console.log(err));
   }
+
 // Корзинки
   function handleCardDelete(card) {
     // Снова проверяем, наша карточка или нет
@@ -83,6 +97,7 @@ function App() {
     })
     .catch((err) => console.log(err));
 }
+
 // Получение данных с сервера о пользователе
     useEffect(()=>{
       Promise.all([api.getProfile(),api.getInitialCards()])
@@ -121,7 +136,9 @@ function App() {
 
          <EditAvatarPopup
          isOpen={isAvatarPopupOpen}
-         onClose ={closeAllPopups}/>
+         onClose ={closeAllPopups}
+         onUpdateAvatar={handleUpdateAvatar}
+         />
 
         < AddPlacePopup
         isOpen={isAddCardPopupOpen}
