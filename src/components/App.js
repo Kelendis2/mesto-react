@@ -23,7 +23,7 @@ function App() {
   const  [cards,setCards] = useState([])
   const  [currentUser,setCurrentUser] = useState([])
   const  [selectedCard, setSelectedCard] = useState({});
-
+  const  [isLoading, setIsLoading] = useState(false);
   // Получение данных с сервера о пользователе
   useEffect(()=>{
     Promise.all([api.getProfile(),api.getInitialCards()])
@@ -40,12 +40,16 @@ function App() {
     setAvatarPopupOpen(true)}
 
     const handleUpdateAvatar = (value)=>{
+       setIsLoading(true);
       api.editAvatar(value)
         .then((res)=>{
           setCurrentUser(res);
           closeAllPopups();
          })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
 
 //Открытие попапа изменения профиля и изменение информации в нем.
@@ -54,12 +58,16 @@ function App() {
     }
 
     const handleUpdateUser = (value)=>{
+      setIsLoading(true);
       api.editProfile(value)
         .then(({name,about})=>{
           setCurrentUser({name,about});
           closeAllPopups();
          })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
 
 // Открытие попапа добавления карточки и добавление ее на страницу.
@@ -74,12 +82,16 @@ function App() {
     }
 
     const handleAddCard = (value)=>{
+      setIsLoading(true);
       api.addCard(value)
         .then((newCard)=>{
           setCards([newCard, ...cards]);
           closeAllPopups();
          })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
 
 // Закрытие всех попапов
@@ -107,11 +119,16 @@ function App() {
 // Корзинки
   function handleCardDelete(card) {
     // Отправляем запрос в API и удаляем карточку
+    setIsLoading(true);
     api.deleteCard(card._id)
     .then((item) => {
         setCards(cards.filter((item) => item._id !== card._id));
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err))
+    .finally(() => {
+      setIsLoading(false);
+    });
+
 }
 
   return (
@@ -137,23 +154,28 @@ function App() {
          <EditProfilePopup
          isOpen={isProfilePopupOpen}
          onClose ={closeAllPopups}
-         onUpdateUser = {handleUpdateUser}/>
+         onUpdateUser = {handleUpdateUser}
+         isLoading={isLoading}
+         />
 
          <EditAvatarPopup
          isOpen={isAvatarPopupOpen}
          onClose ={closeAllPopups}
          onUpdateAvatar={handleUpdateAvatar}
+         isLoading={isLoading}
          />
 
         < AddPlacePopup
         isOpen={isAddCardPopupOpen}
         onClose ={closeAllPopups}
         onAddPlace={handleAddCard}
+        isLoading={isLoading}
         />
 
         <ConfirmationPopup
         isOpen={isTrashPopupOpen}
-        onClose ={closeAllPopups} />
+        onClose ={closeAllPopups}
+        isLoading={isLoading}/>
 
          <ImagePopup
          card={selectedCard}

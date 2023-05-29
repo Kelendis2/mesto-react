@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 
-export default function AddPlacePopup({isOpen,onClose, onAddPlace}){
+export default function AddPlacePopup({isOpen,onClose, onAddPlace,isLoading}){
   const [values, setValues] = useState({});
 
   function handleChange(evt) {
@@ -20,7 +20,7 @@ return(
   <PopupWithForm
   name = "content"
   title="Новое место"
-  buttonText="Сохранить"
+  buttonText={isLoading ? 'Сохранение...' : 'Сохранить'}
   isOpen={isOpen}
   onClose ={onClose}
   onSubmit={handleSubmit}
