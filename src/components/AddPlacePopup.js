@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 export default function AddPlacePopup({
@@ -9,6 +9,12 @@ export default function AddPlacePopup({
 }) {
   const [values, setValues] = useState({});
 
+  useEffect(() => {
+    if (isOpen) {
+      setValues({});
+    }
+  }, [isOpen]);
+
   function handleChange(evt) {
     setValues({ ...values, [evt.target.name]: evt.target.value });
   }
@@ -16,7 +22,6 @@ export default function AddPlacePopup({
   function handleSubmit(evt) {
     evt.preventDefault();
     onAddPlace(values);
-    setValues({});
   }
 
   return (

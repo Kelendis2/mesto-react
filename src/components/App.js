@@ -64,6 +64,7 @@ function App() {
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
+
       })
       .catch((err) => console.log(err))
       .finally(() => {
@@ -95,6 +96,7 @@ function App() {
         setIsLoading(false);
       });
   };
+
 
   // Закрытие всех попапов
   function closeAllPopups() {
